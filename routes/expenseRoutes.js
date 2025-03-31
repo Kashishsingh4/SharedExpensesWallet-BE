@@ -63,8 +63,8 @@ router.put("/settle/:id", async (req, res) => {
             return res.status(404).json({ error: "Expense not found" });
         }
 
-        expense.settled = true;  
-        await expense.save();  
+        expense.settled = true;
+        await expense.save();
 
         res.status(200).json({ message: "Expense settled", expense });
     } catch (error) {
@@ -73,6 +73,6 @@ router.put("/settle/:id", async (req, res) => {
     }
 });
 
-
-
 module.exports = router;
+
+

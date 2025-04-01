@@ -23,6 +23,22 @@ mongoose
 app.use("/user", userRoutes);
 app.use("/expenses", expenseRoutes); 
 
+app.get("/api/search", async (req, res) => {
+  const { description } = req.query;
+
+  try {
+    const expenses = await mongoose.model("Expense").find({
+      description: new RegExp(description, "i"), // Case-insensitive search for description
+      settled: true,
+    });
+
+    res.json(expenses); // Return the matching expenses as JSON
+  } catch (error) {
+    console.error("Error fetching expenses:", error);
+    res.status(500).send("Error fetching data");
+  }
+});
+
 app.listen(config.port, () => {
   console.log(`Server running on port ${config.port}`);
 });

@@ -28,11 +28,11 @@ app.get("/api/search", async (req, res) => {
 
   try {
     const expenses = await mongoose.model("Expense").find({
-      description: new RegExp(description, "i"), // Case-insensitive search for description
+      description: new RegExp(description, "i"), 
       settled: true,
     });
 
-    res.json(expenses); // Return the matching expenses as JSON
+    res.json(expenses); 
   } catch (error) {
     console.error("Error fetching expenses:", error);
     res.status(500).send("Error fetching data");

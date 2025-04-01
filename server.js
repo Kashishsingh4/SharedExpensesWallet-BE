@@ -12,10 +12,7 @@ app.use(cors());
 
 
 mongoose
-  .connect(config.mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(config.mongoURI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log("Error connecting to MongoDB:", err));
 
@@ -24,20 +21,17 @@ app.use("/user", userRoutes);
 app.use("/expenses", expenseRoutes); 
 
 app.get("/api/search", async (req, res) => {
-  console.log("Received search request:", req.query);  // Debugging log
 
   const { description, username } = req.query;
   
   try {
-      const Expense = mongoose.model("Expense");  // Ensure model exists
+      const Expense = mongoose.model("Expense");  
       
       const expenses = await Expense.find({
           description: new RegExp(description, "i"),
           settled: true,
           username: new RegExp(username, "i")
       });
-
-      console.log("Expenses found:", expenses); // Log output for debugging
       res.json(expenses);
   } catch (error) {
       console.error("Error fetching expenses:", error);

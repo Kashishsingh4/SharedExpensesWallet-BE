@@ -24,20 +24,27 @@ app.use("/user", userRoutes);
 app.use("/expenses", expenseRoutes); 
 
 app.get("/api/search", async (req, res) => {
-  const { description } = req.query;
+  console.log("Received search request:", req.query);  // Debugging log
 
+  const { description, username } = req.query;
+  
   try {
-    const expenses = await mongoose.model("Expense").find({
-      description: new RegExp(description, "i"), 
-      settled: true,
-    });
+      const Expense = mongoose.model("Expense");  // Ensure model exists
+      
+      const expenses = await Expense.find({
+          description: new RegExp(description, "i"),
+          settled: true,
+          username: new RegExp(username, "i")
+      });
 
-    res.json(expenses); 
+      console.log("Expenses found:", expenses); // Log output for debugging
+      res.json(expenses);
   } catch (error) {
-    console.error("Error fetching expenses:", error);
-    res.status(500).send("Error fetching data");
+      console.error("Error fetching expenses:", error);
+      res.status(500).send("Error fetching data");
   }
 });
+
 
 app.listen(config.port, () => {
   console.log(`Server running on port ${config.port}`);
